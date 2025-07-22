@@ -405,7 +405,7 @@
         } else if (path.includes('index') || path.endsWith('/')) {
           titleElement.textContent = 'المسلسلات';
         } else {
-          titleElement.textContent = 'DFKZ';
+          titleElement.textContent = 'revo';
         }
       }
 
