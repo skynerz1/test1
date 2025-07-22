@@ -280,7 +280,10 @@
     <div class="mobile-header mobile-only">
       <button class="header-btn left-btn"><i class="fas fa-cog"></i></button>
       <h1 class="mobile-title" id="mobile-page-title">Revo</h1>
-      <button class="header-btn right-btn" id="mobile-search-btn"><i class="fas fa-search"></i></button>
+     <a href="#" class="header-btn right-btn" id="mobile-search-btn">
+  <i class="fas fa-search"></i>
+</a>
+
     </div>
 
 
