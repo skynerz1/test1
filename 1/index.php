@@ -1,5 +1,6 @@
 <?php
 include 'includes/header.php';
+include 'load.php';
 
 // دالة لعمل طلب GET للAPI مع البحث
 function fetchSearchResults($query) {
