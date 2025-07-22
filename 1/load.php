@@ -20,11 +20,12 @@
 }
 
 .loading-logo {
-  width: 100px;
-  height: 100px;
+  width: 160px; /* كان 100px */
+  height: 160px;
   animation: pulse 1.5s infinite ease-in-out;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
+
 
 .loading-logo img {
   width: 100%;
