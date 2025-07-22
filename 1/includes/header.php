@@ -257,7 +257,7 @@
     <!-- Mobile/iPad Top Header -->
     <div class="mobile-header mobile-only">
       <button class="header-btn left-btn"><i class="fas fa-cog"></i></button>
-      <h1 class="mobile-title" id="mobile-page-title">DFKZ</h1>
+      <h1 class="mobile-title" id="mobile-page-title">Revo</h1>
       <button class="header-btn right-btn" id="mobile-search-btn"><i class="fas fa-search"></i></button>
     </div>
 
@@ -265,7 +265,7 @@
     
     <!-- Logo -->
     <a href="index.php" class="logo-text">
-      <img src="../includes/img/dfkz.png" alt="dfkz Logo">
+      <img src="../includes/img/revo.png" alt="revo Logo">
     </a>
 
     <!-- زر البحث بجانب اللوقو -->
