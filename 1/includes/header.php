@@ -284,10 +284,13 @@
     <!-- Desktop Nav -->
     <nav class="main-nav desktop-only">
       <ul class="nav-list">
-        <li><a href="../index.php"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="movie.php"><i class="fas fa-film"></i> Movies</a></li>
-        <li><a href="../index.php"><i class="fas fa-tv"></i> Series</a></li>
-        <li><a href="live.php"><i class="fas fa-broadcast-tower"></i> Channels</a></li>
+
+  <li><a href="index.php"><i class="fas fa-home"></i> الرئيسية</a></li>
+  <li><a href="movie.php"><i class="fas fa-film"></i> أفلام</a></li>
+  <li><a href="index.php"><i class="fas fa-tv"></i> مسلسلات</a></li>
+  <li><a href="live.php"><i class="fas fa-broadcast-tower"></i> القنوات</a></li>
+</ul>
+
         <li><a href="../favorites.php"><i class="fas fa-heart"></i> Favorites</a></li>
         <li><a href="../contact.php"><i class="fas fa-envelope"></i> Contact</a></li>
       </ul>
@@ -306,7 +309,7 @@
         <i class="fas fa-film"></i>
         <span>أفلام</span>
       </a>
-      <a href="../index.php" class="nav-item">
+      <a href="index.php" class="nav-item">
         <i class="fas fa-tv"></i>
         <span>مسلسلات</span>
       </a>
