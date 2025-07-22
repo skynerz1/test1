@@ -252,14 +252,22 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  padding: 20px 0;
+  padding: 30px 0; /* زودنا البادينق */
 }
 
 .logo-text img {
-  max-height: 80px; /* أو زودها حسب الحجم اللي تبيه */
+  max-height: 130px; /* كبر الصورة */
   height: auto;
   width: auto;
 }
+
+/* للجوال والآيباد */
+@media (max-width: 991px) {
+  .logo-text img {
+    max-height: 150px; /* أكبر في الجوال */
+  }
+}
+
 
 
   </style>
