@@ -246,6 +246,20 @@
       }
 
 
+.logo-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.logo-text img {
+  max-height: 80px; /* أو زودها حسب الحجم اللي تبيه */
+  height: auto;
+  width: auto;
+}
 
 
   </style>
