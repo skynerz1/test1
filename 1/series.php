@@ -308,7 +308,7 @@ if (isset($_GET['id'])) {
 
 
 <div class="background-blur"></div>
-<div class="background-black"></div>
+
 
     <div class="container" style="padding: 0 20px; max-width: 1200px; margin: 0 auto;">
         <?php if (!empty($error)): ?>
