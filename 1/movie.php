@@ -1,5 +1,6 @@
 <?php
 include 'includes/header.php';
+include 'load.php';
 
 // دالة البحث كما هي
 function fetchSearchResults($query) {
