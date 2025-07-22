@@ -226,7 +226,7 @@
       }
 
       /* الجوال والآيباد (أقل من 1025px) */
-      @media (max-width: 1024px) {
+      @media (max-width: 1300px) {
         .desktop-only {
           display: none !important;
         }
