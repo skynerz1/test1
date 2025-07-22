@@ -89,7 +89,7 @@
       <!-- Top Text -->
       <div class="footer-text">
         &copy; 2025 Watch Series. All rights reserved.<br>
-        Created by <span style="color: #e50914; font-weight: bold;">✨DFKZ✨</span>
+        Created by <span style="color: #e50914; font-weight: bold;">DFKZ - Revo</span>
       </div>
 
       <!-- Bottom Links -->
