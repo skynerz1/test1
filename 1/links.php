@@ -100,13 +100,13 @@
 
                 // تعديل أسماء أول سيرفرين إذا موجودين
                 if (isset($episodeLinks[0])) {
-                    $episodeLinks[0]['type'] = 'سيرفر دفكز';
+                    $episodeLinks[0]['type'] = 'سيرفر ريفو';
                 }
                 if (isset($episodeLinks[1])) {
-                    $episodeLinks[1]['type'] = 'سيرفر دفكز 2';
+                    $episodeLinks[1]['type'] = 'سيرفر ريفو 2';
                 }
                 if (isset($episodeLinks[2])) {
-                    $episodeLinks[2]['type'] = 'سيرفر دفكز 3';
+                    $episodeLinks[2]['type'] = 'سيرفر ريفو 3';
                 }
 
                 $downloadLink = getDownloadLink($episodeLinks);
@@ -528,7 +528,7 @@ foreach ($episodeLinks as $link) {
                     <!-- إعلان تليجرام -->
                     <div class="corner-ad" id="cornerAd">
                         <button class="close-corner-ad" onclick="document.getElementById('cornerAd').style.display='none'">×</button>
-                        <a href="https://t.me/mtvmslsl1" target="_blank">
+                        <a href="https://t.me/error575" target="_blank">
                             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="إعلان" />
                             <div class="corner-ad-text">
                                 <strong>تابعنا على تليجرام</strong>
