@@ -265,7 +265,7 @@
     
     <!-- Logo -->
     <a href="index.php" class="logo-text">
-      <img src="../includes/img/revo.png" alt="revo Logo">
+      <img src="includes/img/revo.png" alt="revo Logo">
     </a>
 
     <!-- زر البحث بجانب اللوقو -->
