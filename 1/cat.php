@@ -2,6 +2,7 @@
 <?php
 // session_start();
 include 'includes/header.php';
+include 'load.php';
 
 $category = $_GET['category'] ?? 'series';
 $type = $_GET['type'] ?? 'created';
