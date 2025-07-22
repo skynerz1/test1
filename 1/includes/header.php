@@ -313,7 +313,7 @@
   <li><a href="live.php"><i class="fas fa-broadcast-tower"></i> القنوات</a></li>
 </ul>
 
-        <li><a href="../favorites.php"><i class="fas fa-heart"></i> Favorites</a></li>
+        <li><a href="favorites.php"><i class="fas fa-heart"></i> Favorites</a></li>
         <li><a href="../contact.php"><i class="fas fa-envelope"></i> Contact</a></li>
       </ul>
     </nav>
@@ -335,7 +335,7 @@
         <i class="fas fa-tv"></i>
         <span>مسلسلات</span>
       </a>
-      <a href="../favorites.php" class="nav-item">
+      <a href="favorites.php" class="nav-item">
         <i class="fas fa-heart"></i>
         <span>المفضلة</span>
       </a>
