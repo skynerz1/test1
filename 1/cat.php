@@ -128,7 +128,7 @@ if ($type === 'ramadan' && $category === 'series') {
     // حالة الأنواع الأخرى (غير رمضاني)
     } else {
         $block = max(1, (int)($_GET['block'] ?? 1));  // رقم المجموعة الحالية (1, 2, 3, ...)
-        $pagesPerBlock = 10;
+        $pagesPerBlock = 500;
         $startPage = ($block - 1) * $pagesPerBlock + 1;
         $endPage = $block * $pagesPerBlock;
 
@@ -176,16 +176,8 @@ if ($type === 'ramadan' && $category === 'series') {
 
     }
 if (!($type === 'ramadan' && $category === 'series')) {
-    // تفعيل التقسيم الداخلي داخل البلوك
-    $pageInBlock = max(1, (int)($_GET['page_in_block'] ?? 1));
-    $itemsPerPage = 18;
-
-    $totalItems = count($items);
-    $totalPagesInBlock = ceil($totalItems / $itemsPerPage);
-
-    // قص النتائج حسب الصفحة الحالية داخل البلوك
-    $startIndex = ($pageInBlock - 1) * $itemsPerPage;
-    $items = array_slice($items, $startIndex, $itemsPerPage);
+    // عرض جميع العناصر دفعة واحدة بدون تقسيم صفحات داخلية
+    // تمت إزالة التقسيم الداخلي
 }
 
     // نحصل على رابط الرجوع (ref) من باراميتر GET
@@ -486,13 +478,13 @@ if (!($type === 'ramadan' && $category === 'series')) {
 
 
     <?php if (!($type === 'ramadan' && $category === 'series') && $category !== 'channels'): ?>
-        <div class="pagination">
+        <!-- <div class="pagination">
             <?php if ($block > 1): ?>
                 <a href="?category=<?= urlencode($category) ?>&type=<?= urlencode($type) ?>&classification=<?= urlencode($selectedClassification) ?>&genre=<?= urlencode($selectedGenre) ?>&block=<?= $block - 1 ?>" class="prev">⬅️ السابقة</a>
             <?php endif; ?>
             <a href="?category=<?= urlencode($category) ?>&type=<?= urlencode($type) ?>&classification=<?= urlencode($selectedClassification) ?>&genre=<?= urlencode($selectedGenre) ?>&block=<?= $block + 1 ?>" class="next">التالي ➡️</a>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
 
 </div>
