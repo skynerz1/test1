@@ -369,25 +369,31 @@
 
       // تعديل action فورم البحث حسب الصفحة
 
-      function updateSearchFormAction() {
-        const path = window.location.pathname.toLowerCase();
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
+function updateSearchFormAction() {
+  const path = window.location.pathname.toLowerCase();  // مثال: /1/index.php
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('category');
 
-        let actionUrl = '';
+  // استخراج المسار الحالي (مثل: /1/)
+  const currentDir = path.substring(0, path.lastIndexOf('/') + 1);
 
-        if (path.includes('movie.php')) {
-          actionUrl = 'movie.php';  // صفحة الأفلام
-        } else if (path.includes('live.php') || (path.includes('cat.php') && category === 'channels')) {
-          actionUrl = 'live.php';   // صفحة القنوات (live.php) أو cat.php مع تصنيف القنوات
-        } else {
-          actionUrl = 'index.php'; // الصفحة الرئيسية للمسلسلات
-        }
+  let actionFile = '';
 
-        document.querySelectorAll('form.mobile-search-form').forEach(form => {
-          form.setAttribute('action', actionUrl);
-        });
-      }
+  if (path.includes('movie.php')) {
+    actionFile = 'movie.php';
+  } else if (path.includes('live.php') || (path.includes('cat.php') && category === 'channels')) {
+    actionFile = 'live.php';
+  } else {
+    actionFile = 'index.php';
+  }
+
+  const actionUrl = currentDir + actionFile;
+
+  document.querySelectorAll('form.mobile-search-form').forEach(form => {
+    form.setAttribute('action', actionUrl);
+  });
+}
+
 
 
       // استدعاء التعديل فور تحميل الصفحة
