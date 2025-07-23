@@ -376,12 +376,12 @@
 
         let actionUrl = '';
 
-        if (path.includes('/movie.php')) {
+        if (path.includes('movie.php')) {
           actionUrl = 'movie.php';  // صفحة الأفلام
-        } else if (path.includes('/live.php') || (path.includes('/cat.php') && category === 'channels')) {
+        } else if (path.includes('live.php') || (path.includes('cat.php') && category === 'channels')) {
           actionUrl = 'live.php';   // صفحة القنوات (live.php) أو cat.php مع تصنيف القنوات
         } else {
-          actionUrl = '/index.php'; // الصفحة الرئيسية للمسلسلات
+          actionUrl = 'index.php'; // الصفحة الرئيسية للمسلسلات
         }
 
         document.querySelectorAll('form.mobile-search-form').forEach(form => {
