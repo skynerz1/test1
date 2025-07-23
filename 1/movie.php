@@ -254,7 +254,7 @@ if ($searchQuery !== '') {
                     $title = isset($item['title']) ? $item['title'] : 'فيلم بدون عنوان';
                     $img = isset($item['image']) ? $item['image'] : 'https://via.placeholder.com/140x200?text=No+Image';
                     $id = isset($item['id']) ? $item['id'] : 0;
-                    $link = "movie.php?id=" . urlencode($id);
+                    $link = "movie/links.php?id=" . urlencode($id);
                 ?>
                 <a href="<?= htmlspecialchars($link) ?>" tabindex="0" aria-label="<?= htmlspecialchars($title) ?>">
                     <div class="CH1-card" role="link">
