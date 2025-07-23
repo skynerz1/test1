@@ -251,6 +251,11 @@ if ($searchQuery !== '') {
   .back-button:hover {
       background-color: #45a049;
   }
+    @media (max-width: 600px) {
+    .CH1-card .name {
+        font-size: 13px;
+    }
+}
 </style>
 </head>
 <body>
