@@ -212,15 +212,17 @@ if ($searchQuery !== '') {
       box-shadow: 0 2px 8px rgba(0,0,0,0.7);
       object-fit: cover;
   }
-  .CH1-card .name {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-  }
+.CH1-card .name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    white-space: normal; /* يسمح للنص باللف */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+    word-break: break-word; /* يكسر الكلمة الطويلة */
+}
   .CH1-card .count {
       font-size: 13px;
       color: #aaa;
