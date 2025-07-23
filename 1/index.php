@@ -66,7 +66,8 @@ $seriesCategories = [
         'count' => '4500+'
     ],
     [
-        'name' => 'مسلسلات رمضان 2025 كلها',
+        'name' => 'مسلسلات رمضان
+        2025 كلها',
         'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2025',
         'image' => 'https://image.tmdb.org/t/p/w500/thyjoTwA67uBrL7C8Ir25QhHLGY.jpg',
         'count' => '130+'
