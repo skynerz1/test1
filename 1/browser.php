@@ -1,4 +1,6 @@
 <?php
+$typeFilter = $_GET['type'] ?? null;
+
 include 'load.php';
 include 'includes/header.php';
 
@@ -8,7 +10,9 @@ $perPage = 12;
 
 $sourceFiles = ["includes/sourse/browser.json", "includes/sourse/browser1.json"];  // ملفات المصدر
 $cacheDir = "cache";
-$cacheFile = "{$cacheDir}/{$platform}_page_{$page}.json";
+$typeKey = $typeFilter ?? 'all';
+$cacheFile = "{$cacheDir}/{$platform}_{$typeKey}_page_{$page}.json";
+
 $cacheMeta = "{$cacheDir}/{$platform}_pages.txt";
 
 if (!file_exists($cacheDir)) mkdir($cacheDir, 0777, true);
@@ -23,14 +27,26 @@ if (file_exists($cacheFile) &&
     $allShows = [];
 
     // قراءة ودمج البيانات من الملفين
+    $typeFilter = $_GET['type'] ?? null; // أضف هذا السطر قبل الحلقة
+
     foreach ($sourceFiles as $file) {
         if (file_exists($file)) {
             $data = json_decode(file_get_contents($file), true);
             if (isset($data[$platform]) && is_array($data[$platform])) {
-                $allShows = array_merge($allShows, $data[$platform]);
+                $platformData = $data[$platform];
+
+                // فلترة حسب النوع إذا تم تحديده
+                if ($typeFilter === 'mov') {
+                    $platformData = array_filter($platformData, fn($item) => $item['type'] === 'movie');
+                } elseif ($typeFilter === 'ser') {
+                    $platformData = array_filter($platformData, fn($item) => $item['type'] === 'serie');
+                }
+
+                $allShows = array_merge($allShows, $platformData);
             }
         }
     }
+
 
     $totalShows = count($allShows);
     $totalPages = max(1, ceil($totalShows / $perPage));
@@ -148,14 +164,18 @@ body {
 
 <h2 class="platform-title">Choose Platform</h2>
 
+<?php $typeParam = isset($_GET['type']) ? '&type=' . urlencode($_GET['type']) : ''; ?>
+
 <div class="category-container">
-  <a href="?platform=netflix&page=1" class="category-card <?= $platform === 'netflix' ? 'active' : '' ?>" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGhnm_NIUms1oIl6QLrxjZzws8wLW_MVPOyw&s');" title="Netflix"></a>
-  <a href="?platform=shahid&page=1" class="category-card <?= $platform === 'shahid' ? 'active' : '' ?>" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlwV1US7Ou5Sa4bd8ALXdp1QVcpQV9rPRr_A&s');" title="Shahid"></a>
-      <a href="?platform=osn&page=1" class="category-card <?= $platform === 'osn' ? 'active' : '' ?>" style="background-image: url('https://play-lh.googleusercontent.com/1O4pKO7UZtF4lL61zgTeA9aoao3TRCZMgerHrvI-k0DNMvnL2-QQX63l_h2E_ayHvtU');" title="osn"></a>
-  <a href="?platform=kids&page=1" class="category-card <?= $platform === 'kids' ? 'active' : '' ?>" style="background-image: url('https://i.pinimg.com/736x/e6/84/49/e68449b851a8ffb8256a71daab209775.jpg');" title="Kids"></a>
+  <a href="?platform=netflix&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'netflix' ? 'active' : '' ?>" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGhnm_NIUms1oIl6QLrxjZzws8wLW_MVPOyw&s');" title="Netflix"></a>
+  <a href="?platform=shahid&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'shahid' ? 'active' : '' ?>" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlwV1US7Ou5Sa4bd8ALXdp1QVcpQV9rPRr_A&s');" title="Shahid"></a>
+  <a href="?platform=osn&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'osn' ? 'active' : '' ?>" style="background-image: url('https://play-lh.googleusercontent.com/1O4pKO7UZtF4lL61zgTeA9aoao3TRCZMgerHrvI-k0DNMvnL2-QQX63l_h2E_ayHvtU');" title="OSN"></a>
+  <a href="?platform=kids&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'kids' ? 'active' : '' ?>" style="background-image: url('https://i.pinimg.com/736x/e6/84/49/e68449b851a8ffb8256a71daab209775.jpg');" title="Kids"></a>
 </div>
 
+
 <div class="cards-container">
+    
 <?php foreach ($showsPage as $show): ?>
     <?php
         $isMovie = isset($show['type']) && $show['type'] === 'movie';
@@ -213,7 +233,8 @@ body {
     ?>
 
     <?php if ($page < $totalPages): ?>
-        <a href="?platform=<?= urlencode($platform) ?>&page=<?= $page + 1 ?>">التالي ➡️</a>
+        <a href="?platform=<?= urlencode($platform) ?>&page=<?= $page + 1 ?>&type=<?= urlencode($typeFilter) ?>">
+التالي ➡️</a>
     <?php endif; ?>
 </div>
 <?php endif; ?>
