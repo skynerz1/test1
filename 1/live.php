@@ -288,7 +288,16 @@ if ($search !== null) {
     }
     echo '</div>';
 } else {
-    echo '<button class="CH1-back-button" onclick="history.back()">← رجوع</button>';
+    echo '<button class="CH1-back-button" onclick="
+        if (document.referrer) {
+            window.location.href = document.referrer + (document.referrer.includes(\'?\') ? \'&\' : \'?\') + \'_t=\' + new Date().getTime();
+        } else {
+            history.back();
+        }
+    ">← رجوع</button>';
+
+
+
     echo '<div class="CH1-grid channels">';
     foreach ($categories[$current]['channels'] as $channel) {
         echo '<a href="' . htmlspecialchars($channel['url']) . '">
