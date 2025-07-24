@@ -37,6 +37,12 @@ file_put_contents('search_results.json', json_encode(['posters' => $filtered], J
 $moviesCategories = [
     // نفس البيانات عندك
     [
+        'name' => 'أفلام الحديثه + الكل',
+        'url' => 'cat.php?category=movies&type=created',
+        'image' => 'https://image.tmdb.org/t/p/w500/5LjepL2VheteoBLeMRcciesRMYo.jpg',
+        'count' => '6555+'
+    ],
+    [
         'name' => 'أفلام أجنبية',
         'url' => 'cat.php?category=movies&type=created&classification=all&genre=أفلام%20أجنبية',
         'image' => 'https://image.tmdb.org/t/p/w500/1m10QitDjpbZgFP1syXgVOv2pH7.jpg',
@@ -59,6 +65,30 @@ $moviesCategories = [
         'url' => 'cat.php?category=movies&type=created&classification=all&genre=أفلام%20هندية',
         'image' => 'https://image.tmdb.org/t/p/w500/5LjepL2VheteoBLeMRcciesRMYo.jpg',
         'count' => '800+'
+    ],
+    [
+        'name' => 'افلام نتفلكس',
+        'url' => 'browser.php?platform=netflix&page=1&type=mov',
+        'image' => 'https://app.arabypros.com/uploads/cache/poster_thumb/uploads/jpg/4Z3XlmD3xhjKmPofKj3wf9l3CtT.jpg',
+        'count' => '+ 20'
+    ],
+    [
+        'name' => 'افلام شاهد',
+        'url' => 'browser.php?platform=shahid&page=1&type=mov',
+        'image' => 'https://image.tmdb.org/t/p/w500/z0YPcVdWvxG5dmBL0QRQeB2B6Th.jpg',
+        'count' => '+ 3'
+    ],
+    [
+        'name' => 'افلام osn',
+        'url' => 'browser.php?platform=osn&page=1&type=mov',
+        'image' => 'https://image.tmdb.org/t/p/w500/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg',
+        'count' => '+ 10'
+    ],
+    [
+        'name' => 'افلام اطفال',
+        'url' => 'https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg',
+        'image' => 'https://image.tmdb.org/t/p/w500/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg',
+        'count' => '+ 20'
     ],
     [
         'name' => 'أفلام رعب',
