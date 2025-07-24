@@ -1,6 +1,5 @@
 <?php
 include 'includes/header.php';
-include 'load.php';
 
 // دالة لعمل طلب GET للAPI مع البحث
 function fetchSearchResults($query) {
@@ -28,7 +27,7 @@ function fetchSearchResults($query) {
         }
     }
 
-file_put_contents('search_results.json', json_encode(['posters' => $filtered], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    file_put_contents('search_results.json', json_encode(['posters' => $filtered], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
 
     return $filtered;
@@ -67,8 +66,31 @@ $seriesCategories = [
         'count' => '4500+'
     ],
     [
-        'name' => 'مسلسلات رمضان
-        2025 كلها',
+        'name' => 'مسلسلات نتفلكس',
+        'url' => 'browser.php?platform=netflix&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/iH3jOYJr5ZXYJZqHqMoUMaVIUUK.jpg',
+        'count' => '20+'
+    ],
+    [
+        'name' => 'مسلسلات شاهد',
+        'url' => 'browser.php?platform=shahid&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/132NXjSXMPJnUz57ym6M7Rw0q9X.jpg',
+        'count' => '30+'
+    ],
+    [
+        'name' => 'مسلسلات osn',
+        'url' => 'browser.php?platform=osn&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/t9XkeE7HzOsdQcDDDapDYh8Rrmt.jpg',
+        'count' => '30+'
+    ],
+    [
+        'name' => 'مسلسلات اطفال',
+        'url' => 'browser.php?platform=kids&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/b3cvx3qFkzQ3YjVWrrwIHA4RCgH.jpg',
+        'count' => '7+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2025 كلها',
         'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2025',
         'image' => 'https://image.tmdb.org/t/p/w500/thyjoTwA67uBrL7C8Ir25QhHLGY.jpg',
         'count' => '130+'
@@ -213,17 +235,15 @@ if ($searchQuery !== '') {
       box-shadow: 0 2px 8px rgba(0,0,0,0.7);
       object-fit: cover;
   }
-.CH1-card .name {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 4px;
-    white-space: normal; /* يسمح للنص باللف */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    text-align: center;
-    word-break: break-word; /* يكسر الكلمة الطويلة */
-}
+  .CH1-card .name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+  }
   .CH1-card .count {
       font-size: 13px;
       color: #aaa;
@@ -252,11 +272,6 @@ if ($searchQuery !== '') {
   .back-button:hover {
       background-color: #45a049;
   }
-    @media (max-width: 600px) {
-    .CH1-card .name {
-        font-size: 13px;
-    }
-}
 </style>
 </head>
 <body>
