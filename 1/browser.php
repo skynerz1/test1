@@ -13,7 +13,8 @@ $cacheDir = "cache";
 $typeKey = $typeFilter ?? 'all';
 $cacheFile = "{$cacheDir}/{$platform}_{$typeKey}_page_{$page}.json";
 
-$cacheMeta = "{$cacheDir}/{$platform}_pages.txt";
+$cacheMeta = "{$cacheDir}/{$platform}_{$typeKey}_pages.txt";
+
 
 if (!file_exists($cacheDir)) mkdir($cacheDir, 0777, true);
 
