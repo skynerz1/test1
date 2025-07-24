@@ -13,8 +13,7 @@ $cacheDir = "cache";
 $typeKey = $typeFilter ?? 'all';
 $cacheFile = "{$cacheDir}/{$platform}_{$typeKey}_page_{$page}.json";
 
-$cacheMeta = "{$cacheDir}/{$platform}_{$typeKey}_pages.txt";
-
+$cacheMeta = "{$cacheDir}/{$platform}_pages.txt";
 
 if (!file_exists($cacheDir)) mkdir($cacheDir, 0777, true);
 
@@ -163,7 +162,7 @@ body {
 }
 </style>
 
-<h2 class="platform-title">Choose Platform</h2>
+<!-- <h2 class="platform-title">Choose Platform</h2>
 
 <?php $typeParam = isset($_GET['type']) ? '&type=' . urlencode($_GET['type']) : ''; ?>
 
@@ -172,7 +171,7 @@ body {
   <a href="?platform=shahid&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'shahid' ? 'active' : '' ?>" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlwV1US7Ou5Sa4bd8ALXdp1QVcpQV9rPRr_A&s');" title="Shahid"></a>
   <a href="?platform=osn&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'osn' ? 'active' : '' ?>" style="background-image: url('https://play-lh.googleusercontent.com/1O4pKO7UZtF4lL61zgTeA9aoao3TRCZMgerHrvI-k0DNMvnL2-QQX63l_h2E_ayHvtU');" title="OSN"></a>
   <a href="?platform=kids&page=1<?= $typeParam ?>" class="category-card <?= $platform === 'kids' ? 'active' : '' ?>" style="background-image: url('https://i.pinimg.com/736x/e6/84/49/e68449b851a8ffb8256a71daab209775.jpg');" title="Kids"></a>
-</div>
+</div> -->
 
 
 <div class="cards-container">
