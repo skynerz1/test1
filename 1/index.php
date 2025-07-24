@@ -28,7 +28,8 @@ function fetchSearchResults($query) {
         }
     }
 
-    file_put_contents('search_results.json', json_encode($filtered, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+file_put_contents('search_results.json', json_encode(['posters' => $filtered], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
 
     return $filtered;
 }
