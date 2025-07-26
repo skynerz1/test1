@@ -276,15 +276,31 @@ if ($searchQuery !== '') {
   .back-button:hover {
       background-color: #45a049;
   }
+    .CH1-grid a:focus .CH1-card {
+      outline: 3px solid #ff3d3d; /* خط خارجي أحمر */
+      box-shadow: 0 0 10px #ff3d3d; /* توهج */
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease;
+    }
+    .focused-back-button {
+      outline: none;
+      background-color: #ff3d3d !important;
+      color: white !important;
+      box-shadow: 0 0 10px #ff3d3d;
+      border-radius: 6px;
+    }
+
+
 </style>
 </head>
 <body>
 
-<?php if ($searchQuery !== ''): ?>
-    <div style="text-align:center;">
-        <a href="?" class="back-button" aria-label="عودة إلى الصفحة الرئيسية">رجوع</a>
-    </div>
-<?php endif; ?>
+    <?php if ($searchQuery !== ''): ?>
+        <div style="text-align:center;">
+            <a href="?" class="back-button" tabindex="0" aria-label="عودة إلى الصفحة الرئيسية">رجوع</a>
+        </div>
+    <?php endif; ?>
+
 
 <div class="CH1-grid">
     <?php if ($searchQuery !== ''): ?>
@@ -320,5 +336,162 @@ if ($searchQuery !== '') {
     <?php endif; ?>
 </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const backButton = document.querySelector('.back-button');
+          const focusableItems = Array.from(document.querySelectorAll('.CH1-grid a[tabindex="0"]'));
+          const sidebarItems = Array.from(document.querySelectorAll('.sidebar-nav a[tabindex="0"]'));
+
+          if (focusableItems.length === 0) return;
+
+          const gridItems = backButton ? [backButton, ...focusableItems] : focusableItems;
+
+          let currentIndex = backButton ? 1 : 0;
+          let inSidebar = false;
+
+          // عدد الأعمدة ديناميكي حسب العرض
+          function getItemsPerRow() {
+            if (window.innerWidth <= 600) return 2;
+            if (window.innerWidth <= 1024) return 3;
+            return 5;
+          }
+
+          let itemsPerRow = getItemsPerRow();
+
+          // حدث تغيير الحجم نحدث قيمة الأعمدة
+          window.addEventListener('resize', () => {
+            itemsPerRow = getItemsPerRow();
+          });
+
+          function updateHighlight() {
+            gridItems.forEach((el, i) => {
+              const card = el.querySelector('.CH1-card');
+              if (card) {
+                if (i === currentIndex && !inSidebar) {
+                  card.classList.add('active');
+                } else {
+                  card.classList.remove('active');
+                }
+              }
+            });
+
+            if (backButton) {
+              if (currentIndex === 0 && !inSidebar) {
+                backButton.classList.add('focused-back-button');
+              } else {
+                backButton.classList.remove('focused-back-button');
+              }
+            }
+          }
+
+          function focusCurrent() {
+            gridItems[currentIndex].focus();
+            updateHighlight();
+
+            // تمرير العنصر لعرضه في منتصف الشاشة تقريبًا
+            gridItems[currentIndex].scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+              inline: 'center'
+            });
+          }
+
+          focusCurrent();
+
+          let lastRightArrowTime = 0;
+
+          document.addEventListener('keydown', (e) => {
+            if (!inSidebar) {
+              switch(e.key) {
+                case 'ArrowRight': {
+                  const now = Date.now();
+                  if ((now - lastRightArrowTime) < 500) {
+                    // فتح الهيدر
+                    if (sidebarItems.length > 0) {
+                      inSidebar = true;
+                      sidebarItems[0].focus();
+                      backButton?.classList.remove('focused-back-button');
+                      e.preventDefault();
+                      return;
+                    }
+                  }
+                  lastRightArrowTime = now;
+
+                  currentIndex = (currentIndex - 1 + gridItems.length) % gridItems.length;
+                  focusCurrent();
+                  e.preventDefault();
+                  break;
+                }
+                case 'ArrowLeft':
+                  currentIndex = (currentIndex + 1) % gridItems.length;
+                  focusCurrent();
+                  e.preventDefault();
+                  break;
+                case 'ArrowDown':
+                  currentIndex = (currentIndex - itemsPerRow + gridItems.length) % gridItems.length;
+                  focusCurrent();
+                  e.preventDefault();
+                  break;
+                case 'ArrowUp':
+                  if (backButton && (currentIndex === 1 || currentIndex === 2)) {
+                    backButton.classList.add('focused-back-button');
+                    backButton.focus();
+                    currentIndex = 0;
+                  } else {
+                    currentIndex = (currentIndex + itemsPerRow) % gridItems.length;
+                    focusCurrent();
+                  }
+                  e.preventDefault();
+                  break;
+                case 'Enter':
+                  if(gridItems[currentIndex]) {
+                    gridItems[currentIndex].click();
+                  }
+                  e.preventDefault();
+                  break;
+              }
+            } else {
+              let focusedSidebarIndex = sidebarItems.indexOf(document.activeElement);
+              switch(e.key) {
+                case 'ArrowLeft':
+                  inSidebar = false;
+                  currentIndex = backButton ? 1 : 0;
+                  focusCurrent();
+                  e.preventDefault();
+                  break;
+                case 'ArrowRight':
+                  if (focusedSidebarIndex < sidebarItems.length - 1) {
+                    sidebarItems[focusedSidebarIndex + 1].focus();
+                  }
+                  e.preventDefault();
+                  break;
+                case 'ArrowUp':
+                  if (focusedSidebarIndex > 0) {
+                    sidebarItems[focusedSidebarIndex - 1].focus();
+                  }
+                  e.preventDefault();
+                  break;
+                case 'ArrowDown':
+                  if (focusedSidebarIndex < sidebarItems.length - 1) {
+                    sidebarItems[focusedSidebarIndex + 1].focus();
+                  }
+                  e.preventDefault();
+                  break;
+                case 'Enter':
+                  const focused = document.activeElement;
+                  if (focused) focused.click();
+                  e.preventDefault();
+                  break;
+              }
+            }
+          });
+        });
+
+    </script>
+
+
+
+    
 </body>
+    
 </html>
