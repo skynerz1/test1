@@ -165,11 +165,11 @@ if ($searchQuery !== '') {
       box-sizing: border-box;
       width: 100%;
   }
-  @media (max-width: 1024px) {
+  /* @media (max-width: 1024px) {
       body {
           padding-top: 60px;
       }
-  }
+  } */
   .CH1-grid {
       display: grid;
       gap: 14px;
