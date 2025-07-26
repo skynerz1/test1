@@ -290,7 +290,6 @@
        max-height: 150px;
      }
    }
-   /* هيدر جانبي (فقط للديسكتوب) */
    .sidebar-nav {
      position: fixed;
      top: 0;
@@ -307,7 +306,9 @@
      transition: width 0.3s ease;
    }
 
-   .sidebar-nav:hover {
+   /* توسيع الهيدر عند hover أو عند وجود كلاس expanded */
+   .sidebar-nav:hover,
+   .sidebar-nav.expanded {
      width: 220px;
      align-items: flex-start;
      padding-left: 15px;
@@ -336,7 +337,6 @@
    }
 
    /* البحث الجانبي */
-   /* البحث الجانبي */
    .sidebar-search-container {
      width: 100%;
      padding: 0 10px;
@@ -353,7 +353,9 @@
      overflow: hidden;
    }
 
-   .sidebar-nav:hover .sidebar-search-form {
+   /* يظهر البحث عند hover او expanded */
+   .sidebar-nav:hover .sidebar-search-form,
+   .sidebar-nav.expanded .sidebar-search-form {
      width: 100%;
    }
 
@@ -391,46 +393,51 @@
      transition: opacity 0.3s ease;
    }
 
-   .sidebar-nav:hover .sidebar-search-form .search-wrapper input {
+   /* يظهر الإنبوت عند hover او expanded */
+   .sidebar-nav:hover .sidebar-search-form .search-wrapper input,
+   .sidebar-nav.expanded .sidebar-search-form .search-wrapper input {
      opacity: 1;
    }
 
+   .sidebar-nav [tabindex="0"]:focus {
+     outline: none; /* نشيل الخط الافتراضي */
+     background-color: #ff3d3d; /* خلفية حمراء مميزة */
+     color: white; /* لون النص أبيض */
+     box-shadow: 0 0 10px #ff3d3d; /* توهج حول العنصر */
+     border-radius: 6px;
+   }
 
   </style>
 </head>
 <body>
 
 
-  
-  <!-- الهيدر الجانبي (ديسكتوب فقط) -->
   <aside class="sidebar-nav desktop-only">
-    <a href="index.php" class="sidebar-item">
+    <a href="index.php" class="sidebar-item" tabindex="0">
       <i class="fas fa-tv"></i>
       <span>مسلسلات</span>
     </a>
-    <a href="movie.php" class="sidebar-item">
+    <a href="movie.php" class="sidebar-item" tabindex="0">
       <i class="fas fa-film"></i>
       <span>أفلام</span>
     </a>
-    <a href="live.php" class="sidebar-item">
+    <a href="live.php" class="sidebar-item" tabindex="0">
       <i class="fas fa-broadcast-tower"></i>
       <span>لايف</span>
     </a>
-    <a href="favorites.php" class="sidebar-item">
+    <a href="favorites.php" class="sidebar-item" tabindex="0">
       <i class="fas fa-heart"></i>
       <span>المفضلة</span>
     </a>
-    <!-- البحث داخل الهيدر الجانبي -->
-    <div class="sidebar-search-container">
+    <div class="sidebar-search-container" tabindex="0">
       <form method="GET" action="index.php" class="sidebar-search-form">
         <input type="hidden" name="page" value="2">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
-          <input type="text" name="search" placeholder="ابحث عن فيلم أو مسلسل" required />
+          <input type="text" name="search" placeholder="ابحث عن فيلم أو مسلسل" required tabindex="0" />
         </div>
       </form>
     </div>
-
   </aside>
 
   
@@ -615,6 +622,112 @@ function updateSearchFormAction() {
           desktopSearchBtn.classList.add("active");
         }
       });
+      document.addEventListener('keydown', function(event) {
+        switch(event.key) {
+          case "ArrowUp":
+            // لما تضغط السهم فوق
+            console.log("السهم فوق");
+            // هنا تكتب اللي تبيه يصير مثلاً تحرك التركيز لأعلى
+            break;
+          case "ArrowDown":
+            console.log("السهم تحت");
+            // تحرك التركيز لأسفل أو تنفذ شيء
+            break;
+          case "ArrowLeft":
+            console.log("السهم يسار");
+            // تحرك لليسار أو ترجع صفحة
+            break;
+          case "ArrowRight":
+            console.log("السهم يمين");
+            // تحرك لليمين أو تقدم صفحة
+            break;
+          case "Enter":
+            console.log("تم الضغط على زر OK");
+            // نفذ حدث الضغط على العنصر المحدد (مثل زر أو رابط)
+            const focused = document.activeElement;
+            if (focused) focused.click();
+            break;
+        }
+      });
+      // جلب كل العناصر القابلة للتركيز داخل الهيدر الجانبي (الروابط + حقل البحث)
+      const sidebarItems = Array.from(document.querySelectorAll('.sidebar-nav [tabindex="0"]'));
+
+      let currentIndex = 0;
+
+      // ضبط التركيز على أول عنصر عند تحميل الصفحة
+      sidebarItems[currentIndex].focus();
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          currentIndex = (currentIndex + 1) % sidebarItems.length;
+          sidebarItems[currentIndex].focus();
+          e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+          currentIndex = (currentIndex - 1 + sidebarItems.length) % sidebarItems.length;
+          sidebarItems[currentIndex].focus();
+          e.preventDefault();
+        } else if (e.key === 'Enter') {
+          // عند الضغط على Enter، تنفذ الحدث click على العنصر الحالي
+          const currentElement = sidebarItems[currentIndex];
+          if (currentElement.tagName === 'A') {
+            window.location.href = currentElement.href;
+          } else if (currentElement.tagName === 'INPUT') {
+            // لو حقل البحث، ممكن تفتح لوحة المفاتيح أو تركز عليه فقط
+            currentElement.focus();
+          }
+        }
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar-nav');
+        const searchInput = sidebar.querySelector('.sidebar-search-form input[type="text"]');
+
+        document.addEventListener('keydown', (e) => {
+          const focused = document.activeElement;
+          const isFocusedInSidebar = sidebar.contains(focused);
+
+          if (e.key === 'ArrowRight') {
+            if (isFocusedInSidebar) {
+              sidebar.style.width = '220px';
+              sidebar.style.paddingLeft = '15px';
+              searchInput.style.display = 'block';
+              searchInput.focus();
+              e.preventDefault();
+            }
+          } else if (e.key === 'ArrowLeft') {
+            if (isFocusedInSidebar) {
+              sidebar.style.width = '70px';
+              sidebar.style.paddingLeft = '0px';
+              searchInput.style.display = 'none';
+              e.preventDefault();
+            }
+          }
+        });
+      });
+      document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.querySelector('.sidebar-nav');
+        const searchInput = sidebar.querySelector('.sidebar-search-form input[type="text"]');
+
+        document.addEventListener('keydown', (e) => {
+          const focused = document.activeElement;
+          const isFocusedInSidebar = sidebar.contains(focused);
+
+          if (e.key === 'ArrowRight') {
+            if (isFocusedInSidebar) {
+              sidebar.classList.add('expanded');  // يفتح الهيدر ويظهر البحث
+              searchInput.focus();
+              e.preventDefault();
+            }
+          } else if (e.key === 'ArrowLeft') {
+            if (isFocusedInSidebar) {
+              sidebar.classList.remove('expanded'); // يقفل الهيدر ويخفي البحث
+              // رجع التركيز لأول عنصر أو لعنصر منطقي داخل الهيدر
+              sidebar.querySelector('.sidebar-item')?.focus();
+              e.preventDefault();
+            }
+          }
+        });
+      });
+
     </script>
 
 
