@@ -13,7 +13,7 @@
         margin: 0;
         padding: 0;
       }
-   
+
 
       body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -226,7 +226,7 @@
       }
 
       /* الجوال والآيباد (أقل من 1025px) */
-      @media (max-width: 1300px) {
+      @media (max-width: 1250px) {
         .desktop-only {
           display: none !important;
         }
@@ -287,7 +287,7 @@
     </div>
 
 
-    
+
     <!-- Logo -->
     <a href="index.php" class="logo-text">
       <img src="includes/img/revo.png" alt="revo Logo">
@@ -300,7 +300,7 @@
 
 
 
-    
+
 
 
 
@@ -399,7 +399,7 @@ function updateSearchFormAction() {
       // استدعاء التعديل فور تحميل الصفحة
       window.addEventListener('DOMContentLoaded', updateSearchFormAction);
 
-      
+
       const titleElement = document.getElementById('mobile-page-title');
       const path = window.location.pathname.toLowerCase();
       const searchParams = new URLSearchParams(window.location.search);
