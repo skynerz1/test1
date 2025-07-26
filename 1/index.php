@@ -155,21 +155,24 @@ if ($searchQuery !== '') {
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>مسلسلات</title>
 <style>
-  html, body {
-      margin: 0;
-      padding: 0 20px 20px 20px;
-      background: #111;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-      overflow-x: hidden;
-      box-sizing: border-box;
-      width: 100%;
-  }
-  /* @media (max-width: 1024px) {
-      body {
-          padding-top: 60px;
-      }
-  } */
+    html, body {
+        margin: 0;
+        padding: 0 20px 60px 20px; /* آخر رقم: padding-bottom */
+        background: #111;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    @media (max-width: 1024px) {
+        body {
+            padding-top: 60px;
+            padding-bottom: 80px; /* إذا كان الهيدر السفلي ظاهر فقط في الجوال */
+        }
+    }
+
   .CH1-grid {
       display: grid;
       gap: 14px;
