@@ -268,6 +268,11 @@ if ($searchQuery !== '') {
   .back-button:hover {
       background-color: #45a049;
   }
+    .CH1-card.active {
+      border-color: #4CAF50;
+      box-shadow: 0 0 10px #4CAF50;
+    }
+
 </style>
 </head>
 <body>
@@ -313,4 +318,150 @@ if ($searchQuery !== '') {
 </div>
 
 </body>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const backButton = document.querySelector('.back-button');
+      const gridAnchors = Array.from(document.querySelectorAll('.CH1-grid a[tabindex="0"]'));
+      const sidebarItems = Array.from(document.querySelectorAll('.sidebar-nav a[tabindex="0"]'));
+
+      const focusableItems = backButton ? [backButton, ...gridAnchors] : gridAnchors;
+
+      let currentIndex = 0;
+      let inSidebar = false;
+
+      // لتسجيل توقيت آخر ضغطة سهم يمين
+      let lastRightArrowTime = 0;
+
+      function getColumns() {
+        return window.innerWidth <= 600 ? 2 : 2;
+      }
+
+      function focusItem(index) {
+        if (index < 0 || index >= focusableItems.length) return;
+
+        // إزالة تمييز السابق
+        focusableItems.forEach(el => {
+          const card = el.querySelector('.CH1-card');
+          if (card) card.classList.remove('active');
+        });
+
+        currentIndex = index;
+        const el = focusableItems[currentIndex];
+        el.focus();
+
+        // تفعيل التمييز
+        const card = el.querySelector('.CH1-card');
+        if (card) card.classList.add('active');
+
+        // تمرير العنصر داخل الشاشة
+        const offsetTop = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: offsetTop - 120, behavior: 'smooth' });
+      }
+
+      focusItem(0);
+
+      document.addEventListener("keydown", (e) => {
+        const key = e.key;
+        if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp"].includes(key)) return;
+
+        e.preventDefault();
+        const cols = getColumns();
+
+        if (!inSidebar) {
+          let nextIndex = currentIndex;
+
+          switch (key) {
+            case "ArrowRight":
+              const now = Date.now();
+              if (now - lastRightArrowTime < 500) {
+                // ضغط سهم يمين مرتين بسرعة -> نروح للهيدر (sidebar)
+                if (sidebarItems.length > 0) {
+                  sidebarItems[0].focus();
+                  inSidebar = true;
+                }
+                lastRightArrowTime = 0; // إعادة تعيين
+                return;
+              }
+              lastRightArrowTime = now;
+
+              if (currentIndex > 0) {
+                nextIndex = currentIndex - 1;
+              } else {
+                return; // لا تدوير
+              }
+              break;
+
+            case "ArrowLeft":
+              if (currentIndex < focusableItems.length - 1) {
+                nextIndex = currentIndex + 1;
+              } else {
+                return; // لا تدوير
+              }
+              break;
+
+            case "ArrowDown":
+              let candidateDown = currentIndex + cols;
+              if (candidateDown < focusableItems.length) {
+                nextIndex = candidateDown;
+              } else {
+                return;
+              }
+              break;
+
+            case "ArrowUp":
+              let candidateUp = currentIndex - cols;
+              if (candidateUp >= 0) {
+                nextIndex = candidateUp;
+              } else {
+                // لو فوق آخر صف، نطلع على الهيدر إذا موجود
+                if (sidebarItems.length > 0) {
+                  sidebarItems[0].focus();
+                  inSidebar = true;
+                }
+                return;
+              }
+              break;
+          }
+
+          focusItem(nextIndex);
+
+        } else {
+          // داخل الهيدر فقط نتحكم فيه
+          let focusedSidebarIndex = sidebarItems.indexOf(document.activeElement);
+
+          switch (key) {
+            case "ArrowLeft":
+              // نخرج من الهيدر نرجع للقائمة الرئيسية
+              inSidebar = false;
+              focusItem(currentIndex);
+              break;
+
+            case "ArrowRight":
+              if (focusedSidebarIndex < sidebarItems.length - 1) {
+                sidebarItems[focusedSidebarIndex + 1].focus();
+              }
+              break;
+
+            case "ArrowUp":
+              if (focusedSidebarIndex > 0) {
+                sidebarItems[focusedSidebarIndex - 1].focus();
+              }
+              break;
+
+            case "ArrowDown":
+              if (focusedSidebarIndex < sidebarItems.length - 1) {
+                sidebarItems[focusedSidebarIndex + 1].focus();
+              }
+              break;
+          }
+        }
+      });
+    });
+    </script>
+
+
+
+
+
 </html>
