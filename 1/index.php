@@ -1,463 +1,323 @@
+<?php
+include 'includes/header.php';
+
+// دالة لعمل طلب GET للAPI مع البحث
+function fetchSearchResults($query) {
+    $encodedQuery = urlencode($query);
+    $url = "https://app.arabypros.com/api/search/{$encodedQuery}/0/4F5A9C3D9A86FA54EACEDDD635185/d506abfd-9fe2-4b71-b979-feff21bcad13/";
+    
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    
+    if ($response === false) {
+        return [];
+    }
+    $data = json_decode($response, true);
+    if (!$data || !isset($data['posters'])) {
+        return [];
+    }
+
+    $filtered = [];
+    foreach ($data['posters'] as $item) {
+        if (isset($item['type']) && strtolower($item['type']) === 'serie') {
+            $filtered[] = $item;
+        }
+    }
+
+    file_put_contents('search_results.json', json_encode(['posters' => $filtered], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+
+    return $filtered;
+}
+
+// تعريف المصفوفة الثابتة للكاتيجوريز (مسلسلات)
+$seriesCategories = [
+    [
+        'name' => 'مسلسلات الكل',
+        'url' => 'cat.php?category=series&type=created',
+        'image' => 'https://image.tmdb.org/t/p/w500/fHE2BtkXt62KTXtYbJsjQGzp8D4.jpg',
+        'count' => '10050+'
+    ],
+    [
+        'name' => 'مسلسلات عربية',
+        'url' => 'cat.php?category=series&type=created&classification=all&genre=مسلسلات%20عربية',
+        'image' => 'https://image.tmdb.org/t/p/w500/9yGEmo0JL9VvRlOg9GwBUaYjZ7V.jpg',
+        'count' => '2300+'
+    ],
+    [
+        'name' => 'مسلسلات أجنبية',
+        'url' => 'cat.php?category=series&type=created&classification=all&genre=مسلسلات%20أجنبية',
+        'image' => 'https://image.tmdb.org/t/p/w500/q8oMpXPEAUJJ0KztsRs5K51T2lo.jpg',
+        'count' => '3440+'
+    ],
+    [
+        'name' => 'مسلسلات تركية',
+        'url' => 'cat.php?category=series&type=created&classification=all&genre=مسلسلات%20تركية',
+        'image' => 'https://image.tmdb.org/t/p/w500/8KdwDFFQwtVDEDEqePR3Ble8h1S.jpg',
+        'count' => '3200+'
+    ],
+    [
+        'name' => 'مسلسلات آسيوية',
+        'url' => 'cat.php?category=series&type=created&classification=all&genre=مسلسلات%20آسيوية',
+        'image' => 'https://image.tmdb.org/t/p/w500/fHE2BtkXt62KTXtYbJsjQGzp8D4.jpg',
+        'count' => '4500+'
+    ],
+    [
+        'name' => 'مسلسلات نتفلكس',
+        'url' => 'browser.php?platform=netflix&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/iH3jOYJr5ZXYJZqHqMoUMaVIUUK.jpg',
+        'count' => '20+'
+    ],
+    [
+        'name' => 'مسلسلات شاهد',
+        'url' => 'browser.php?platform=shahid&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/132NXjSXMPJnUz57ym6M7Rw0q9X.jpg',
+        'count' => '30+'
+    ],
+    [
+        'name' => 'مسلسلات osn',
+        'url' => 'browser.php?platform=osn&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/t9XkeE7HzOsdQcDDDapDYh8Rrmt.jpg',
+        'count' => '30+'
+    ],
+    [
+        'name' => 'مسلسلات اطفال',
+        'url' => 'browser.php?platform=kids&page=1&type=ser',
+        'image' => 'https://image.tmdb.org/t/p/w500/b3cvx3qFkzQ3YjVWrrwIHA4RCgH.jpg',
+        'count' => '7+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2025 كلها',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2025',
+        'image' => 'https://image.tmdb.org/t/p/w500/thyjoTwA67uBrL7C8Ir25QhHLGY.jpg',
+        'count' => '130+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2025 خليجي',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2025&subtype=khaleeji',
+        'image' => 'https://image.tmdb.org/t/p/w500/odbPi4ljQtsnzxxQWa2FcWgALe7.jpg',
+        'count' => '56+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2025 عربي',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2025&subtype=araby',
+        'image' => 'https://image.tmdb.org/t/p/w500/thyjoTwA67uBrL7C8Ir25QhHLGY.jpg',
+        'count' => '70+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2024 كلها',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2024',
+        'image' => 'https://image.tmdb.org/t/p/w500/tVFcPn4U5tklSrmnornYGDBX7ui.jpg',
+        'count' => '165+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2024 خليجي',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2024&subtype=khaleeji',
+        'image' => 'https://image.tmdb.org/t/p/w500/tVFcPn4U5tklSrmnornYGDBX7ui.jpg',
+        'count' => '76+'
+    ],
+    [
+        'name' => 'مسلسلات رمضان 2024 عربي',
+        'url' => 'cat.php?category=series&type=ramadan&ramadan_year=2024&subtype=araby',
+        'image' => 'https://image.tmdb.org/t/p/w500/nWKN6GOsf7wlawVjWPGCgSDMi1F.jpg',
+        'count' => '60+'
+    ],
+    [
+        'name' => 'مسلسلات جديدة دراما',
+        'url' => 'cat.php?category=series&type=created&classification=دراما&genre=all',
+        'image' => 'https://image.tmdb.org/t/p/w500/4zOZzlSjHjUJgc2Gp20iFfpkRBV.jpg',
+        'count' => '250+'
+    ],
+];
+$currentUrl = $_SERVER['REQUEST_URI'];
+foreach ($seriesCategories as &$cat) {
+    $cat['url'] .= (strpos($cat['url'], '?') === false ? '?' : '&') . 'ref=' . urlencode($currentUrl);
+}
+unset($cat);
+
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+if ($searchQuery !== '') {
+    $filteredCategories = fetchSearchResults($searchQuery);
+} else {
+    $filteredCategories = $seriesCategories;
+}
+
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DFKZ WATCH MOVIE & SERIES & CHANNEL</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="styles.css">
- <style>
-      /* ========== الأساسيات ========== */
-      * {
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>مسلسلات</title>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0 20px 60px 20px; /* آخر رقم: padding-bottom */
+        background: #111;
+        color: #fff;
+        font-family: 'Arial', sans-serif;
+        overflow-x: hidden;
         box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #1c2229;
-        padding-bottom: 60px; /* للبوتوم بار */
-      }
-
-      /* ========== هيدر الديسكتوب ========== */
-      header.desktop-only {
-        background-color: #1c2229;
-        padding: 6px 30px;
-        position: relative;
-        z-index: 100;
-        display: flex;
-      }
-
-      .header-content {
-        max-width: 1200px;
-        margin: auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .logo-text img {
-        height: 45px;
-        vertical-align: middle;
-      }
-
-      .logo-text {
-        color: red;
-        font-size: 26px;
-        font-weight: bold;
-        text-decoration: none;
-      }
-
-      .main-nav ul.nav-list {
-        display: flex;
-        list-style: none;
-        gap: 20px;
-        flex-wrap: wrap;
-      }
-
-      .main-nav ul.nav-list li a {
-        color: white;
-        text-decoration: none;
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: background 0.3s ease, color 0.3s ease;
-      }
-
-      .main-nav ul.nav-list li a:hover {
-        background-color: #1c2229;
-        color: red;
-      }
-
-      /* ========== هيدر الجوال / الآيباد ========== */
-   .mobile-header {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     z-index: 1000;
-     background-color: #1c2229;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     padding: 10px 15px;
-     border-bottom: 1px solid #333;
-   }
-
-
-      .mobile-header .mobile-title {
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        margin: 0;
-        flex: 1;
-        text-align: center;
-      }
-
-      .header-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-        width: 35px;
-      }
-
-      .header-btn:hover {
-        color: red;
-      }
-
-      /* ========== Bottom Bar للجوال والآيباد ========== */
-      .bottom-nav {
-        position: fixed;
-        bottom: 10px;
-
-        left: 0;
         width: 100%;
-        background: #1c2229;
-        display: none;
-        justify-content: space-around;
-        border-top: 1px solid #333;
-        z-index: 999;
-        padding: 6px 0;
-      }
+    }
 
-      .bottom-nav .nav-item {
-        flex: 1;
-        text-align: center;
-        color: white;
-        text-decoration: none;
-        font-size: 11px;
-        transition: color 0.3s ease;
-      }
-
-      .bottom-nav .nav-item i {
-        display: block;
-        font-size: 20px;
-        margin-bottom: 3px;
-      }
-
-      .bottom-nav .nav-item:hover {
-        color: red;
-      }
-
-      /* ========== البحث المنبثق للجوال ========== */
-      .mobile-search-overlay {
-        display: none;
-        position: fixed;
-        bottom: 60px;
-        left: 0;
-        width: 100%;
-        background: #1c2229;
-        padding: 10px;
-        border-top: 1px solid #333;
-        z-index: 1000;
-      }
-
-      .mobile-search-form {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .mobile-search-form input {
-        flex: 1;
-        padding: 8px 10px;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        background: #2a2f36;
-        color: white;
-      }
-
-      .mobile-search-form button {
-        padding: 8px 12px;
-        border: none;
-        background-color: red;
-        color: white;
-        border-radius: 6px;
-        cursor: pointer;
-      }
-
-      /* ========== أزرار البحث ديسكتوب ========== */
-      .desktop-search-overlay {
-        display: none;
-        background: #1c2229;
-        padding: 10px 20px;
-        border-bottom: 1px solid #333;
-        z-index: 999;
-      }
-
-      #desktop-search-btn.active i {
-        color: red !important;
-      }
-
-      .search-icon-btn {
-        text-decoration: none;
-        outline: none;
-        box-shadow: none;
-      }
-
-      .search-icon-btn:focus {
-        outline: none;
-      }
-
-      /* ========== تخصيص العرض ========== */
-
-      /* ديسكتوب فقط (1025px وفوق) */
-      @media (min-width: 1025px) {
-        .desktop-only {
-          display: flex !important;
+    @media (max-width: 1024px) {
+        body {
+            padding-top: 60px;
+            padding-bottom: 80px; /* إذا كان الهيدر السفلي ظاهر فقط في الجوال */
         }
+    }
 
-        .mobile-header,
-        .bottom-nav,
-        .mobile-only {
-          display: none !important;
-        }
-
-        .desktop-search-overlay {
-          display: block;
-        }
-      }
-
-      /* الجوال والآيباد (أقل من 1025px) */
-      @media (max-width: 1250px) {
-        .desktop-only {
-          display: none !important;
-        }
-
-        .mobile-header,
-        .bottom-nav,
-        .mobile-only {
-          display: flex !important;
-        }
-
-        .desktop-search-overlay {
-          display: none !important;
-        }
-         body {
-           padding-top: 60px; /* نفس ارتفاع .mobile-header */
-         }
-      }
-
-
-.logo-text {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  padding: 30px 0; /* زودنا البادينق */
-}
-
-.logo-text img {
-  max-height: 130px; /* كبر الصورة */
-  height: auto;
-  width: auto;
-}
-
-/* للجوال والآيباد */
-@media (max-width: 991px) {
-  .logo-text img {
-    max-height: 150px; /* أكبر في الجوال */
+  .CH1-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, 1fr);
+      margin-bottom: 80px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+      box-sizing: border-box;
   }
-}
-
-
-
-  </style>
+  *, *::before, *::after {
+      box-sizing: border-box;
+  }
+  @media (max-width: 600px) {
+      body {
+          padding-left: 20px;
+          padding-right: 20px;
+      }
+      .CH1-grid {
+          grid-template-columns: repeat(2, 1fr);
+          justify-content: center;
+          gap: 10px;
+          max-width: 320px;
+          margin: 0 auto;
+          margin-bottom: 40px;
+      }
+      .CH1-card img {
+          max-width: 120px;
+      }
+      .CH1-card {
+          padding: 8px 4px;
+      }
+      .CH1-card .name {
+          font-size: 14px;
+      }
+      .CH1-card .count {
+          font-size: 12px;
+      }
+  }
+  .CH1-card {
+      background: #222;
+      border-radius: 16px;
+      text-align: center;
+      padding: 10px 5px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .CH1-card:hover,
+  .CH1-card:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 10px #4CAF50;
+  }
+  .CH1-card img {
+      width: 100%;
+      max-width: 140px;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      object-fit: cover;
+  }
+  .CH1-card .name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+  }
+  .CH1-card .count {
+      font-size: 13px;
+      color: #aaa;
+  }
+  a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      outline: none;
+  }
+  .back-button {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 8px 16px;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      max-width: 120px;
+      font-weight: bold;
+      user-select: none;
+  }
+  .back-button:hover {
+      background-color: #45a049;
+  }
+</style>
 </head>
 <body>
-<!-- header -->
-<header>
-  <div class="header-content">
-    <!-- Mobile/iPad Top Header -->
-    <div class="mobile-header mobile-only">
-      <button class="header-btn left-btn"><i class="fas fa-cog"></i></button>
-      <h1 class="mobile-title" id="mobile-page-title">Revo</h1>
-     <a href="#" class="header-btn right-btn" id="mobile-search-btn">
-  <i class="fas fa-search"></i>
-</a>
 
+<?php if ($searchQuery !== ''): ?>
+    <div style="text-align:center;">
+        <a href="?" class="back-button" aria-label="عودة إلى الصفحة الرئيسية">رجوع</a>
     </div>
+<?php endif; ?>
 
-
-
-    <!-- Logo -->
-    <a href="index.php" class="logo-text">
-      <img src="includes/img/revo.png" alt="revo Logo">
-    </a>
-
-    <!-- زر البحث بجانب اللوقو -->
-    <a href="#" id="desktop-search-btn" class="desktop-only search-icon-btn" style="margin-left: 10px;">
-      <i class="fas fa-search" style="color:white; font-size: 20px;"></i>
-    </a>
-
-
-
-
-
-
-
-
-
-    <!-- Desktop Nav -->
-    <nav class="main-nav desktop-only">
-      <ul class="nav-list">
-
-  <li><a href="index.php"><i class="fas fa-home"></i> الرئيسية</a></li>
-  <li><a href="movie.php"><i class="fas fa-film"></i> أفلام</a></li>
-  <li><a href="index.php"><i class="fas fa-tv"></i> مسلسلات</a></li>
-  <li><a href="live.php"><i class="fas fa-broadcast-tower"></i> القنوات</a></li>
-</ul>
-
-        <li><a href="favorites.php"><i class="fas fa-heart"></i> Favorites</a></li>
-        <li><a href="../contact.php"><i class="fas fa-envelope"></i> Contact</a></li>
-      </ul>
-    </nav>
-
-
-
-  <!-- Mobile Nav -->
-  <!-- Bottom Navigation (Mobile Only) -->
-    <nav class="bottom-nav mobile-only">
-      <a href="live.php" class="nav-item">
-        <i class="fas fa-broadcast-tower"></i>
-        <span>لايف</span>
-      </a>
-      <a href="movie.php" class="nav-item">
-        <i class="fas fa-film"></i>
-        <span>أفلام</span>
-      </a>
-      <a href="index.php" class="nav-item">
-        <i class="fas fa-tv"></i>
-        <span>مسلسلات</span>
-      </a>
-      <a href="favorites.php" class="nav-item">
-        <i class="fas fa-heart"></i>
-        <span>المفضلة</span>
-      </a>
-    </nav>
-
-
-  <!-- نموذج البحث (يظهر عند الضغط على زر البحث) -->
-  <div class="mobile-search-overlay" id="search-overlay">
-    <form method="GET" action="index.php" class="mobile-search-form">
-      <input type="hidden" name="page" value="2">
-      <input type="text" name="search" placeholder="ابحث عن فيلم أو مسلسل او بث ..." required />
-      <button type="submit"><i class="fas fa-search"></i></button>
-    </form>
-  </div>
-    <!-- نموذج البحث المنبثق (للديسكتوب) -->
-    <div class="desktop-search-overlay" id="desktop-search-overlay">
-      <form method="GET" action="index.php" class="mobile-search-form" style="padding: 10px;">
-        <input type="hidden" name="page" value="2">
-        <input type="text" name="search" placeholder="ابحث عن فيلم أو مسلسل او بث مباشر" required />
-        <button type="submit"><i class="fas fa-search"></i></button>
-      </form>
-    </div>
-
-
-</header>
-
-    <script>
-
-      // تعديل action فورم البحث حسب الصفحة
-
-function updateSearchFormAction() {
-  const path = window.location.pathname.toLowerCase();  // مثال: /1/index.php
-  const urlParams = new URLSearchParams(window.location.search);
-  const category = urlParams.get('category');
-
-  // استخراج المسار الحالي (مثل: /1/)
-  const currentDir = path.substring(0, path.lastIndexOf('/') + 1);
-
-  let actionFile = '';
-
-  if (path.includes('movie.php')) {
-    actionFile = 'movie.php';
-  } else if (path.includes('live.php') || (path.includes('cat.php') && category === 'channels')) {
-    actionFile = 'live.php';
-  } else {
-    actionFile = 'index.php';
-  }
-
-  const actionUrl = currentDir + actionFile;
-
-  document.querySelectorAll('form.mobile-search-form').forEach(form => {
-    form.setAttribute('action', actionUrl);
-  });
-}
-
-
-
-      // استدعاء التعديل فور تحميل الصفحة
-      window.addEventListener('DOMContentLoaded', updateSearchFormAction);
-
-
-      const titleElement = document.getElementById('mobile-page-title');
-      const path = window.location.pathname.toLowerCase();
-      const searchParams = new URLSearchParams(window.location.search);
-
-      if (titleElement) {
-        if (path.includes('movie')) {
-          titleElement.textContent = 'الأفلام';
-        } else if (path.includes('live.php')) {
-          titleElement.textContent = 'البث المباشر';
-        } else if (path.includes('favorites')) {
-          titleElement.textContent = 'المفضلة';
-        } else if (path.includes('index') || path.endsWith('/')) {
-          titleElement.textContent = 'المسلسلات';
-        } else {
-          titleElement.textContent = 'revo';
-        }
-      }
-
-
-      // إظهار/إخفاء البحث عند الضغط
-      const mobileSearchBtn = document.getElementById("mobile-search-btn");
-      const mobileSearchOverlay = document.getElementById("search-overlay");
-
-      mobileSearchBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        mobileSearchOverlay.style.display = mobileSearchOverlay.style.display === "block" ? "none" : "block";
-      });
-      // بحث الجوال
-      const toggleSearchBtn = document.getElementById("toggle-search");
-      const searchOverlay = document.getElementById("search-overlay");
-
-      toggleSearchBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-        searchOverlay.style.display = searchOverlay.style.display === "block" ? "none" : "block";
-      });
-
-      // بحث الديسكتوب
-      const desktopSearchBtn = document.getElementById("desktop-search-btn");
-      const desktopSearchOverlay = document.getElementById("desktop-search-overlay");
-
-      desktopSearchBtn?.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        const isVisible = desktopSearchOverlay.style.display === "block";
-
-        desktopSearchOverlay.style.display = isVisible ? "none" : "block";
-
-        // تغيير لون الأيقونة
-        if (isVisible) {
-          desktopSearchBtn.classList.remove("active");
-        } else {
-          desktopSearchBtn.classList.add("active");
-        }
-      });
-    </script>
-
-
+<div class="CH1-grid">
+    <?php if ($searchQuery !== ''): ?>
+        <?php if (count($filteredCategories) > 0): ?>
+            <?php foreach ($filteredCategories as $item): ?>
+                <?php
+                    $title = isset($item['title']) ? $item['title'] : 'مسلسل بدون عنوان';
+                    $img = isset($item['image']) ? $item['image'] : 'https://via.placeholder.com/140x200?text=No+Image';
+                    $id = isset($item['id']) ? $item['id'] : 0;
+                    $link = "series.php?id=" . urlencode($id);
+                ?>
+                <a href="<?= htmlspecialchars($link) ?>" tabindex="0" aria-label="<?= htmlspecialchars($title) ?>">
+                    <div class="CH1-card" role="link">
+                        <img src="<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($title) ?>">
+                        <div class="name"><?= htmlspecialchars($title) ?></div>
+                        <div class="count">مسلسل</div>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p style="text-align:center; color:#f44336;">لم يتم العثور على نتائج للبحث "<?= htmlspecialchars($searchQuery) ?>"</p>
+        <?php endif; ?>
+    <?php else: ?>
+        <?php foreach ($filteredCategories as $cat): ?>
+            <a href="<?= htmlspecialchars($cat['url']) ?>" tabindex="0" aria-label="<?= htmlspecialchars($cat['name']) ?>">
+                <div class="CH1-card" role="link">
+                    <img src="<?= htmlspecialchars($cat['image']) ?>" alt="<?= htmlspecialchars($cat['name']) ?>">
+                    <div class="name"><?= htmlspecialchars($cat['name']) ?></div>
+                    <div class="count"><?= htmlspecialchars($cat['count']) ?> مسلسل</div>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
 
 </body>
 </html>
